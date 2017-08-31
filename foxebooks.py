@@ -7,14 +7,23 @@ import sys
 import urllib2
 import re
 from os import path
+import getpass
 
 def existeArchivo(file):
-    filename, file_extension = path.splitext(file)
-    return (path.isfile(filename + '.pdf') \
-     or path.isfile(filename + '.epub') \
-     or path.isfile(filename + '.azw3') \
-     or path.isfile(filename + '.mobi')
-     or path.isfile(filename + '.rar'))
+    filename_complete, file_extension = path.splitext(file)
+    filename = filename_complete.split('/')[-1]
+
+    downloaded_file = open(path.join('/home', getpass.getuser(), '.book-dl/foxebook'), 'r')
+    downloaded_list = downloaded_file.readlines()
+    for book in downloaded_list:
+        if (book.strip() == filename):
+            return True
+
+    return (path.isfile(filename_complete + '.pdf') \
+     or path.isfile(filename_complete + '.epub') \
+     or path.isfile(filename_complete + '.azw3') \
+     or path.isfile(filename_complete + '.mobi')
+     or path.isfile(filename_complete + '.rar'))
 
 #Código para descargar archivo con barra de progreso
 def download(url, dest, repeated):
@@ -36,6 +45,9 @@ def download(url, dest, repeated):
             status = status + chr(8)*(len(status)+1)
             print status,
         print "\n"
+        downloaded_file = open(path.join('/home', getpass.getuser(), '.book-dl/foxebook'), 'w')
+        ext = dest.rfind('.')
+        downloaded_file.write(dest[0:ext]+"\n")
         f.close()
         return True
     else:
@@ -73,6 +85,7 @@ def getLinksLibros(url, byear):
     return links
 
 def getDownloadLinks(url):
+    print url
     links = []
     r = requests.get(url)
     if r.status_code == 200:
@@ -129,7 +142,7 @@ def main(url, dest, byear, all, pages_to_analize, repeated):
         print 'Categorías, autores, publicadores, etc.'
         return
 
-    if 'authors' in url or 'publisher' in url or 'tag' in url or 'category' in url:
+    if 'authors' in url or 'publisher' in url or 'tag' in url or 'category' or 'search' in url:
         single = False
 
     if single:

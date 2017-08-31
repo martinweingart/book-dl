@@ -37,8 +37,12 @@ def main():
         if args.editorials:
             for e in editoriales_foxebook.keys():
                 print e
-        url = editoriales_foxebook[args.editorial] if editoriales_foxebook[args.editorial] else args.url
-        foxebooks.main(url, args.dest, args.byear, args.all, args.pages, args.repeated)
+        else:
+            if (args.editorial and editoriales_foxebook[args.editorial]):
+                url = editoriales_foxebook[args.editorial]
+            else:
+                url = args.url
+            foxebooks.main(url, args.dest, args.byear, args.all, args.pages, args.repeated)
     elif 'epublibre' in args.url:
         epublibre.main(args.url, args.inicio, args.fin)
 

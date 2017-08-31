@@ -8,6 +8,8 @@ import urllib2
 import re
 from os import path
 import transmissionrpc
+import time
+import getpass
 
 def getTorrent(url):
     r = requests.get(url)
@@ -30,6 +32,13 @@ def getLinksLibros(url):
 
 def downloadLibro(client, url):
     magnet_link = getTorrent(url)
+    downloaded_file = open(path.join('/home', getpass.getuser(), '.book-dl/epublibre'), 'r+')
+    downloaded_list = downloaded_file.readlines()
+    for book in downloaded_list:
+        if (book.strip() == url):
+            print "Libro ya descargado"
+            return False
+    downloaded_file.write(url+"\n")
     client.add_torrent(magnet_link)
 
 def main(url, inicio, fin):
@@ -58,6 +67,8 @@ def main(url, inicio, fin):
         fin = int(fin) if fin else len(libros)-1
         total_libros = fin - inicio
         for libro in libros[inicio:fin]:
+            if i % 5 == 0:
+                time.sleep(100)
             print 'Agregando torrent {} de {}'.format(i, total_libros)
             downloadLibro(trans_client, libro)
             i  = i + 1

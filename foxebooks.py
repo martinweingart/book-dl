@@ -142,7 +142,8 @@ def main(url, dest, byear, all, pages_to_analize, repeated):
         print 'Categorías, autores, publicadores, etc.'
         return
 
-    if 'authors' in url or 'publisher' in url or 'tag' in url or 'category' or 'search' in url:
+    if 'authors' in url or 'publisher' in url \
+        or 'tag' in url or 'category' in url or 'search' in url:
         single = False
 
     if single:

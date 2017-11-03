@@ -85,7 +85,6 @@ def getLinksLibros(url, byear):
     return links
 
 def getDownloadLinks(url):
-    print url
     links = []
     r = requests.get(url)
     if r.status_code == 200:

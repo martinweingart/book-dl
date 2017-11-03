@@ -68,7 +68,7 @@ def main(url, inicio, fin):
         total_libros = fin - inicio
         for libro in libros[inicio:fin]:
             if i % 5 == 0:
-                time.sleep(100)
+                time.sleep(120)
             print 'Agregando torrent {} de {}'.format(i, total_libros)
             downloadLibro(trans_client, libro)
             i  = i + 1

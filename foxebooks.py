@@ -107,14 +107,14 @@ def getDownloadUrl(url):
         for script in soup.find_all('script'):
             if 'dlbutton' in script.text:
                 m = re.search('href =(.+);', script.text)
+                m_num = re.search('var a = (\d+%\d+)', script.text)
+                numeros = m_num.group(1).split('%')
                 partes = m.group(1).split('+');
-                nums1 = re.findall('\d+', partes[1])
-                nums2 = re.findall('\d+', partes[2])
-                num = int(nums1[0]) % int(nums1[1]) + int(nums2[0]) % int(nums2[1])
+                num = int(numeros[0]) % int(numeros[1])
                 return "/".join(url.split('/')[0:-3]) + \
                         eliminarEspacioComilla(partes[0])  + \
                         str(num) + \
-                        eliminarEspacioComilla(partes[3])
+                        eliminarEspacioComilla(partes[2])
     return False
 
 def downloadBook(url, dest, repeated):
